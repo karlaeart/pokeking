@@ -15,3 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/store/pokemon', ['as' => 'store.pokemon', 'uses' => 'PokemonActionsController@getAllPokemon']);
