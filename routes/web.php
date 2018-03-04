@@ -16,3 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('/store/pokemon', ['as' => 'store.pokemon', 'uses' => 'PokemonActionsController@getAllPokemon']);
+
+Route::get('/retrieve/pokemon', ['as' => 'retrieve.pokemon', 'uses' => 'PokemonActionsController@printPokemonInfo']);
+Route::get('/store/pokemon/profiles', ['as' => 'store.pokemon.profiles', 'uses' => 'PokemonActionsController@savePokemonProfiles']);
