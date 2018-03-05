@@ -131,4 +131,34 @@ class PokemonActionsController extends Controller
             return $e->getMessage();
         }
     }
+
+    //calculates the sum of stats to declare the king
+    public function findPokemonKing() {
+        $pokemon_profiles = PokemonProfile::all();
+        foreach ($pokemon_profiles as $pokemon_profile) {
+            $info_json = $pokemon_profile->info;
+            $info = json_decode($info_json, true);
+
+            $sum = 0;
+            for ($i=0;$i<6;$i++){
+                $sum += $info['stats'][$i]['base_stat'];
+            }
+
+            $info["stats_sum"] = $sum;
+
+            $info_array[] = $info;
+
+            //create an array that matches pokemon names with their sum of base stats
+//            $stats_sum[] = array('pokemon_name' => $info->forms[0]->name, 'stats_sum' => $sum);
+        }
+//        die(var_dump($info_array[0]));
+        $stats_array = array();
+        foreach ($info_array as $key => $row)
+        {
+            $stats_array[$key] = $row['stats_sum'];
+        }
+        array_multisort($stats_array, SORT_DESC, $info_array);
+
+        return $info_array[0];
+    }
 }

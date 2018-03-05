@@ -19,10 +19,38 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!-- Styles -->
         <style>
-
+            #pokemon-king {
+                font-weight: bold;
+            }
+            span {
+                color: #0000F0;
+            }
         </style>
+        <script>
+            $(function() {
+                $('.poke-btn').click(function () {
+                    $.ajax({
+                        url: '/find/pokemon/king',
+                        success: function (data) {
+                            console.log(data);
+                            var pokemon_king = document.getElementById('pokemon-king');
+                            pokemon_king.innerHTML = '<p>The Pokemon King is <span>' + data.forms[0].name + '</span>!!!</p>';
+                            pokemon_king.innerHTML += '<p>Base Experience: ' + data.base_experience + '</p>';
+                            pokemon_king.innerHTML += '<p>Height: ' + data.height + '</p>';
+                            pokemon_king.innerHTML += '<p>Weight: ' + data.weight + '</p>';
+                            pokemon_king.innerHTML += '<img src=\'' + data.sprites.front_default + '\'/>';
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+                });
+            });
+
+        </script>
     </head>
     <body>
         <div class="container">
@@ -54,8 +82,9 @@
                         {!! $paginator->links() !!}
                     </div>
                     <div class="text-center pokeking-button">
-                        <button type="button" class="btn btn-info">Declare the Pokemon King!</button>
+                        <button type="button" class="poke-btn btn btn-info">Declare the Pokemon King!</button>
                     </div>
+                    <div id="pokemon-king"></div>
                 </div>
             </div>
         </div>
