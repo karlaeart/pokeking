@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Schema;
 use GuzzleHttp\Client;
 use App\Pokemon;
 use App\PokemonProfile;
@@ -21,7 +22,26 @@ class PokemonActionsController extends Controller
     //saves each pokemon's info from the API to the pokemon_profiles table
     public function savePokemonProfiles() {
         try {
-            $pokemons = Pokemon::all();
+            //check if pokemon_profiles table exists and
+            //continue adding rows that are not added yet
+            if (Schema::hasTable('pokemon_profiles')) {
+                $last_row = PokemonProfile::all()->sortByDesc('pokemon_id')->first();
+
+                //if table is empty we want to iterate through all the pokemon
+                if ($last_row == null){
+                    $last_row_id = 0;
+                } else {
+                    $last_row_id = $last_row->pokemon_id;
+                }
+
+                $pokemons = Pokemon::where('id', '>', $last_row_id)->get();
+
+                if ($pokemons == null) {
+                    return 'Store pokemon in the database first';
+                }
+            } else {
+                $pokemons = Pokemon::all();
+            }
 
             foreach ($pokemons as $pokemon) {
                 $url = $pokemon->url;
